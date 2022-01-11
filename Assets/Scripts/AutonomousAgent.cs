@@ -1,3 +1,4 @@
+using Assets.Scripts;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -25,6 +26,11 @@ public class AutonomousAgent : Agent
 			Vector3 force = steering.Flee(this, gameObjects[0]);
 			acceleration += force;
 		}
+		else
+		{
+			Vector3 force = steering.Wander(this);
+			acceleration += force;
+		}
 
 		velocity += acceleration * Time.deltaTime;
 
@@ -36,5 +42,6 @@ public class AutonomousAgent : Agent
 		{
 			transform.rotation = Quaternion.LookRotation(velocity);
 		}
+		transform.position = Utilities.Wrap(transform.position, new Vector3(-10, -10, -10), new Vector3(10, 10, 10));
 	}
 }

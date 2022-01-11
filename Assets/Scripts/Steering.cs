@@ -4,14 +4,19 @@ using UnityEngine;
 
 public class Steering : MonoBehaviour
 {
-	[SerializeField] float wanderDistance = 1;
-	[SerializeField] float wanderRadius = 3;
-	[SerializeField] float wanderDisplacement = 5;
+	[SerializeField] float wanderDistance = 1; // How far from the agent the circle is
+	[SerializeField] float wanderRadius = 3; // The radius of the circle the agent is wandering towards
+	[SerializeField] float wanderDisplacement = 5; // The distance around the circumference of the circle the point can move
 	float wanderAngle = 0;
 
 	public Vector3 Wander(AutonomousAgent agent)
 	{
-
+		wanderAngle = wanderAngle + Random.Range(-wanderDisplacement, wanderDisplacement);
+		Quaternion rotation = Quaternion.AngleAxis(wanderAngle, Vector3.up);
+		Vector3 point = rotation * (Vector3.forward * wanderRadius);
+		Vector3 forward = agent.transform.forward * wanderDistance;
+		Vector3 force = CalculateSteering(agent, forward + point);
+		return force;
 	}
 
 	public Vector3 Seek(AutonomousAgent agent, GameObject target)
